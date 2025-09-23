@@ -37,6 +37,8 @@ export default function AuthProvider({
 
   const login = (currentUser: any) => {
     setUser(currentUser);
+    setIsAdmin(currentUser.role === "admin");
+    localStorage.setItem("token", JSON.stringify(currentUser));
   };
 
   useEffect(() => {
@@ -47,17 +49,10 @@ export default function AuthProvider({
         setUser(parsedUser);
         setIsAdmin(parsedUser.role === "admin");
       } catch (error) {
-        setUser(null);
         localStorage.removeItem("token");
-      } finally {
-        setLoading(false);
       }
-    } else {
-      setUser(null);
-      setIsAdmin(false);
-      setLoading(false);
-      localStorage.removeItem("token");
     }
+    setLoading(false);
   }, []);
 
   const value: AuthContextType = {

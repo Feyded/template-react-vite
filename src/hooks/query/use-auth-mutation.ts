@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { wait } from "@/utils/wait";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 
 type LoginFormData = {
   email: string;
@@ -9,7 +8,6 @@ type LoginFormData = {
 };
 
 export default function useAuthMutation() {
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (formData: LoginFormData) => {
       await wait(500);
@@ -28,16 +26,7 @@ export default function useAuthMutation() {
         throw new Error("Incorrect Email or password");
       }
 
-      localStorage.setItem("token", JSON.stringify(user));
-
       return user;
-    },
-    onSuccess: (user) => {
-      if (user.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
     },
   });
 }

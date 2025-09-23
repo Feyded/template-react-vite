@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -44,6 +45,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
   const { login } = useAuthContext();
   const { mutate, isPending } = useAuthMutation();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,6 +62,11 @@ export default function LoginPage() {
         login(user);
         toast.success("Login Successfull!");
         setError("");
+        if (user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       },
       onError: (error) => {
         setError(error.message);
