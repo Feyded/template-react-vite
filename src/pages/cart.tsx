@@ -6,7 +6,9 @@ import useCartQuery from "@/hooks/query/cart/use-cart-query";
 import useCheckoutMutation from "@/hooks/query/cart/use-checkout-mutation";
 import useRemoveFromCartMutation from "@/hooks/query/cart/use-remove-from-cart.mutation";
 import useRemoveItemQuantityMutation from "@/hooks/query/cart/use-remove-item-quantity-mutation";
+import type { Cart } from "@/types/cart";
 import type { Product } from "@/types/product";
+import { useQueryClient } from "@tanstack/react-query";
 import { Loader, Minus, Plus, ShoppingBag, Tag, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +22,8 @@ export default function CartPage() {
   const { mutate: checkout, isPending: checkingOut } = useCheckoutMutation();
   const { mutate: addQuantity } = useAddItemQuantityMutation();
   const { mutate: removeQuantity } = useRemoveItemQuantityMutation();
+
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const subTotal = useMemo(() => {
@@ -35,6 +39,13 @@ export default function CartPage() {
 
   const handleAddQuantity = (id: string) => {
     addQuantity(id, {
+      onSuccess: () => {
+        queryClient.setQueryData<Cart>(["cart"], (cart) =>
+          cart?.map((item) =>
+            item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+          ),
+        );
+      },
       onError: (error) => {
         toast.error(error.message);
       },
@@ -43,6 +54,13 @@ export default function CartPage() {
 
   const handleRemoveQuantity = (id: string) => {
     removeQuantity(id, {
+      onSuccess: () => {
+        queryClient.setQueryData<Cart>(["cart"], (cart) =>
+          cart?.map((item) =>
+            item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+          ),
+        );
+      },
       onError: (error) => {
         toast.error(error.message);
       },
@@ -51,7 +69,14 @@ export default function CartPage() {
 
   const handleRemoveItem = (id: string) => {
     setCurrentItem(id);
-    removeItem(id);
+    removeItem(id, {
+      onSuccess: () => {
+        toast.success("Item removed from cart.");
+        queryClient.setQueryData<Cart>(["cart"], (cart) =>
+          cart?.filter((item) => item.id !== id),
+        );
+      },
+    });
   };
 
   const handleCheckout = () => {

@@ -1,9 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { wait } from "@/utils/wait";
+import { useMutation } from "@tanstack/react-query";
 
 export default function UseRemoveFromCartMutation() {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      await wait(500);
       const cartStr = localStorage.getItem("cart");
 
       const cart = cartStr ? JSON.parse(cartStr) : [];
@@ -13,9 +14,6 @@ export default function UseRemoveFromCartMutation() {
       );
 
       localStorage.setItem("cart", JSON.stringify(filteredCart));
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }

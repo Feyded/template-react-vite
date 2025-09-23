@@ -1,8 +1,7 @@
 import type { Product } from "@/types/product";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export default function UseRemoveItemQuantityMutation() {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       const cartStr = localStorage.getItem("cart");
@@ -16,9 +15,6 @@ export default function UseRemoveItemQuantityMutation() {
       );
 
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
   });
 }
