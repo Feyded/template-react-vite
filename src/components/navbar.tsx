@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -48,6 +48,7 @@ import useUpdateUserMutation from "@/hooks/query/users/use-update-user-mutation"
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import useCartQuery from "@/hooks/query/cart/use-cart-query";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   username: z.string(),
@@ -55,11 +56,9 @@ const formSchema = z.object({
 });
 
 export default function Navbar() {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const { mutate, isPending } = useUpdateUserMutation();
-  
+  const { user, isAuthenticated, logout } = useAuthContext();
   const { data } = useCartQuery();
 
   const cartCount = useMemo(() => {
@@ -69,27 +68,21 @@ export default function Navbar() {
     );
   }, [data]);
 
-  const tokenStr = localStorage.getItem("token");
-  const user = tokenStr ? JSON.parse(tokenStr) : {};
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: user.username,
-      email: user.email,
+      username: user?.username,
+      email: user?.email,
     },
   });
 
   const handleLogout = async () => {
-    setLoading(true);
-    localStorage.removeItem("token");
-    navigate("/login");
-    setLoading(false);
+    logout();
   };
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     mutate(
-      { id: user.id, ...values },
+      { id: user?.id, ...values },
       {
         onSuccess: () => {
           setOpen(false);
@@ -107,7 +100,7 @@ export default function Navbar() {
       <Link to="/">
         <LayoutDashboard />
       </Link>
-      {tokenStr ? (
+      {isAuthenticated ? (
         <div className="flex items-center gap-3">
           <ModeToggle />
           <div className="relative">
@@ -216,14 +209,8 @@ export default function Navbar() {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel disabled={loading}>
-                      Cancel
-                    </AlertDialogCancel>
-                    <Button
-                      variant="destructive"
-                      onClick={handleLogout}
-                      loading={loading}
-                    >
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button variant="destructive" onClick={handleLogout}>
                       Logout
                     </Button>
                   </AlertDialogFooter>

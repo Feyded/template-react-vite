@@ -22,7 +22,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
 
           {/* CUSTOMER LINKS */}
-          <Route element={<ProtectedRoute role={["user"]} />}>
+          <Route element={<ProtectedRoute role={["user", "admin"]} />}>
             <Route path="/cart" element={<CartPage />} />
           </Route>
         </Route>

@@ -3,15 +3,19 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 export type AuthContextType = {
   isAuthenticated: boolean;
   user: any | null;
-  admin: boolean;
+  isAdmin: boolean;
   loading: boolean;
+  logout: () => void;
+  login: (user: any) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   user: null,
-  admin: false,
+  isAdmin: false,
   loading: true,
+  logout: () => {},
+  login: (_user: any) => {},
 });
 
 export default function AuthProvider({
@@ -20,8 +24,20 @@ export default function AuthProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<any | null>(null);
-  const [admin, setAdmin] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const isAuthenticated = useMemo(() => !!user, [user]);
+
+  const logout = () => {
+    setUser(null);
+    setIsAdmin(false);
+    localStorage.removeItem("token");
+  };
+
+  const login = (currentUser: any) => {
+    setUser(currentUser);
+  };
 
   useEffect(() => {
     const tokenStr = localStorage.getItem("token");
@@ -29,7 +45,7 @@ export default function AuthProvider({
       try {
         const parsedUser = JSON.parse(tokenStr);
         setUser(parsedUser);
-        setAdmin(parsedUser.role === "admin");
+        setIsAdmin(parsedUser.role === "admin");
       } catch (error) {
         setUser(null);
         localStorage.removeItem("token");
@@ -38,16 +54,19 @@ export default function AuthProvider({
       }
     } else {
       setUser(null);
+      setIsAdmin(false);
+      setLoading(false);
+      localStorage.removeItem("token");
     }
   }, []);
-
-  const isAuthenticated = useMemo(() => !!user, [user]);
 
   const value: AuthContextType = {
     isAuthenticated,
     user,
-    admin,
+    isAdmin,
     loading,
+    logout,
+    login,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

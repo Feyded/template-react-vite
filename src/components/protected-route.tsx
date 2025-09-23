@@ -1,21 +1,14 @@
-import { useMemo } from "react";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { Outlet, Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ role }: { role: string[] }) {
-  const tokenStr = localStorage.getItem("token");
+  const { isAuthenticated, user, loading } = useAuthContext();
 
-  const isAuthorized = useMemo(() => {
-    if (!tokenStr) return false;
-    try {
-      const token = JSON.parse(tokenStr);
-      return token.role && role.includes(token.role);
-    } catch (error) {
-      localStorage.removeItem("token");
-      return false;
-    }
-  }, [tokenStr, role]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  if (!isAuthorized) {
+  if (!isAuthenticated || (role.length > 0 && !role.includes(user?.role))) {
     return <Navigate to="/login" replace />;
   }
 

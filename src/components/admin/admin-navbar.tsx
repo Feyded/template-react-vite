@@ -21,17 +21,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function AdminNavbar() {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuthContext();
 
   const handleLogout = async () => {
-    setLoading(true);
-    localStorage.removeItem("token");
+    logout();
     navigate("/login");
-    setLoading(false);
   };
 
   return (
@@ -66,14 +64,8 @@ export default function AdminNavbar() {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel disabled={loading}>
-                    Cancel
-                  </AlertDialogCancel>
-                  <Button
-                    variant="destructive"
-                    onClick={handleLogout}
-                    loading={loading}
-                  >
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <Button variant="destructive" onClick={handleLogout}>
                     Logout
                   </Button>
                 </AlertDialogFooter>

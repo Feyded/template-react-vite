@@ -1,16 +1,19 @@
+import { useAuthContext } from "@/contexts/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function GuestRoute() {
-  const tokenStr = localStorage.getItem("token");
+  const { isAuthenticated, user, loading } = useAuthContext();
 
-  if (tokenStr) {
-    try {
-      const token = JSON.parse(tokenStr);
-      if (token.role === "admin") return <Navigate to="/admin" replace />;
-      return <Navigate to="/" replace />;
-    } catch (error) {
-      localStorage.removeItem("token");
-    }
+  if (loading) {
+    return <div>Loading..</div>;
+  }
+
+  if (isAuthenticated && user?.role === "admin") {
+    return <Navigate to="/admin" replace />;
+  }
+
+  if (isAuthenticated && user?.role === "user") {
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

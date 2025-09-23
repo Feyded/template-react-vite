@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuthContext } from "@/contexts/AuthContext";
 import useAuthMutation from "@/hooks/query/use-auth-mutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -43,7 +44,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
-
+  const { login } = useAuthContext();
   const { mutate, isPending } = useAuthMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +56,8 @@ export default function LoginPage() {
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     mutate(values, {
-      onSuccess: () => {
+      onSuccess: (user) => {
+        login(user);
         toast.success("Login Successfull!");
         setError("");
       },
@@ -68,10 +70,10 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center">
       <Card className="w-full max-w-lg">
         <CardHeader>
-          <CardTitle className="flex justify-center ">
-            <LayoutDashboard className="size-12"/>
+          <CardTitle className="flex justify-center">
+            <LayoutDashboard className="size-12" />
           </CardTitle>
-         
+
           <CardContent className="mt-4">
             <Form {...form}>
               <form
