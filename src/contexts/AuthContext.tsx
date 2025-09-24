@@ -1,12 +1,13 @@
+import type { User } from "@/types/user";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 export type AuthContextType = {
   isAuthenticated: boolean;
-  user: any | null;
+  user: User | null;
   isAdmin: boolean;
   loading: boolean;
   logout: () => void;
-  login: (user: any) => void;
+  login: (user: User) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   loading: true,
   logout: () => {},
-  login: (_user: any) => {},
+  login: () => {},
 });
 
 export default function AuthProvider({
@@ -23,7 +24,7 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -35,7 +36,7 @@ export default function AuthProvider({
     localStorage.removeItem("token");
   };
 
-  const login = (currentUser: any) => {
+  const login = (currentUser: User) => {
     setUser(currentUser);
     setIsAdmin(currentUser.role === "admin");
     localStorage.setItem("token", JSON.stringify(currentUser));
@@ -48,7 +49,7 @@ export default function AuthProvider({
         const parsedUser = JSON.parse(tokenStr);
         setUser(parsedUser);
         setIsAdmin(parsedUser.role === "admin");
-      } catch (error) {
+      } catch {
         localStorage.removeItem("token");
       }
     }

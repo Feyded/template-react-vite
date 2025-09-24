@@ -6,20 +6,14 @@ import useCartQuery from "@/hooks/query/cart/use-cart-query";
 import useCheckoutMutation from "@/hooks/query/cart/use-checkout-mutation";
 import useRemoveFromCartMutation from "@/hooks/query/cart/use-remove-from-cart.mutation";
 import useRemoveItemQuantityMutation from "@/hooks/query/cart/use-remove-item-quantity-mutation";
-import type { Cart } from "@/types/cart";
+import type { Cart, CartItem } from "@/types/cart";
 import type { Product } from "@/types/product";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  Frown,
-  Loader,
-  Minus,
-  Plus,
-  Tag,
-  Trash2,
-} from "lucide-react";
+import { Frown, Loader, Minus, Plus, Tag, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function CartPage() {
   const [currentItem, setCurrentItem] = useState("");
@@ -32,6 +26,7 @@ export default function CartPage() {
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const MotionCard = motion(Card);
 
   const subTotal = useMemo(() => {
     return (data ?? []).reduce(
@@ -45,20 +40,7 @@ export default function CartPage() {
   const total = subTotal + tax;
 
   const handleAddQuantity = (id: string) => {
-    addQuantity(id, {
-      onSuccess: () => {
-        queryClient.setQueryData<Cart>(
-          ["cart"],
-          (cart) =>
-            cart?.map((item) =>
-              item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
-            ) || [],
-        );
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
+    addQuantity(id);
   };
 
   const handleRemoveQuantity = (id: string) => {
@@ -116,16 +98,21 @@ export default function CartPage() {
       {data.length > 0 ? (
         <>
           <div className="space-y-4">
-            {data.map(
-              (product: { id: string; quantity: number; product: Product }) => (
-                <Card key={product.product.id} className="p-4">
+            <AnimatePresence>
+              {data.map((cartItem: CartItem) => (
+                <MotionCard
+                  key={cartItem.id}
+                  className="p-4"
+                  exit={{ opacity: 0, x: 50 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <CardContent className="p-0">
                     <div className="flex flex-col items-center gap-4 sm:flex-row">
                       {/* Product Image */}
                       <div className="flex-shrink-0">
                         <img
-                          src={product.product.image || "/placeholder.svg"}
-                          alt={product.product.description}
+                          src={cartItem.product.image || "/placeholder.svg"}
+                          alt={cartItem.product.description}
                           className="h-24 w-24 rounded-md object-cover"
                         />
                       </div>
@@ -133,10 +120,10 @@ export default function CartPage() {
                       {/* Product Description */}
                       <div className="min-w-0 flex-1">
                         <h3 className="text-foreground mb-2 text-lg font-medium">
-                          {product.product.description}
+                          {cartItem.product.description}
                         </h3>
                         <p className="text-foreground text-2xl font-bold">
-                          ₱{product.product.price.toFixed(2)}
+                          ₱{cartItem.product.price.toFixed(2)}
                         </p>
                       </div>
 
@@ -147,19 +134,19 @@ export default function CartPage() {
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0"
-                            disabled={product.quantity <= 1}
-                            onClick={() => handleRemoveQuantity(product.id)}
+                            disabled={cartItem.quantity <= 1}
+                            onClick={() => handleRemoveQuantity(cartItem.id)}
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
                           <span className="min-w-[3rem] px-3 py-1 text-center">
-                            {product.quantity}
+                            {cartItem.quantity}
                           </span>
                           <Button
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0"
-                            onClick={() => handleAddQuantity(product.id)}
+                            onClick={() => handleAddQuantity(cartItem.id)}
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
@@ -169,10 +156,10 @@ export default function CartPage() {
                           variant="ghost"
                           size="sm"
                           className="text-destructive hover:text-destructive h-8 w-8 p-0"
-                          onClick={() => handleRemoveItem(product.id)}
-                          disabled={removingItem && currentItem === product.id}
+                          onClick={() => handleRemoveItem(cartItem.id)}
+                          disabled={removingItem && currentItem === cartItem.id}
                         >
-                          {removingItem && currentItem === product.id ? (
+                          {removingItem && currentItem === cartItem.id ? (
                             <Loader className="animate-spin" />
                           ) : (
                             <Trash2 className="h-4 w-4" />
@@ -181,9 +168,9 @@ export default function CartPage() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
-              ),
-            )}
+                </MotionCard>
+              ))}
+            </AnimatePresence>
           </div>
           <Card className="mt-8 p-6">
             <div className="space-y-4">

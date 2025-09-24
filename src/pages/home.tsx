@@ -1,6 +1,7 @@
 import CardSkeleton from "@/components/card-skeleton";
 import ProductCard from "@/components/product-card";
 import useProductsQuery from "@/hooks/query/products/use-products.query";
+import type { Product } from "@/types/product";
 
 export default function HomePage() {
   const { data, isFetching, isError } = useProductsQuery();
@@ -17,7 +18,7 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {data?.map((product: any) => (
+      {data?.map((product: Product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>
