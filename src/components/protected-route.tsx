@@ -8,7 +8,7 @@ export default function ProtectedRoute({ role }: { role: string[] }) {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated || (role.length > 0 && !role.includes(user?.role))) {
+  if (!isAuthenticated || (user?.role && !role.includes(user?.role))) {
     return <Navigate to="/login" replace />;
   }
 
