@@ -61,6 +61,7 @@ export default function UserActionCell({ user }: { user: User }) {
     defaultValues: {
       username: user.username,
       email: user.email,
+      avatar: user.avatar,
     },
   });
 
@@ -127,6 +128,19 @@ export default function UserActionCell({ user }: { user: User }) {
                   onSubmit={form.handleSubmit(handleUpdate)}
                   className="space-y-4"
                 >
+                  <FormField
+                    control={form.control}
+                    name="avatar"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Avatar</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="username"

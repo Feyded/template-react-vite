@@ -3,9 +3,25 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import UserActionCell from "./user-action-cell";
 import type { User } from "@/types/user";
-
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 
 export const columns: ColumnDef<User>[] = [
+  {
+    id: "avatar",
+    cell: ({ row }) => {
+      const user = row.original;
+      console.log(user.avatar);
+      return (
+        <div className="ml-5">
+          <Avatar>
+            <AvatarImage src={user.avatar} />
+            <AvatarFallback>{user.avatar}</AvatarFallback>
+          </Avatar>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "username",
     header: "Username",

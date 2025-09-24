@@ -9,10 +9,13 @@ export default function useUpdateUserMutation() {
       id: string;
       username: string;
       email: string;
+      avatar: string;
     }) => {
       await wait(500);
-      const { id, username, email } = formData;
+      const { id, username, email, avatar } = formData;
+
       const users = JSON.parse(localStorage.getItem("users") ?? "[]");
+      const currentUser = JSON.parse(localStorage.getItem("token") || "");
 
       const duplicate = users.find(
         (user: { id: string; email: string; username: string }) =>
@@ -29,8 +32,13 @@ export default function useUpdateUserMutation() {
         }
       }
 
+      if (currentUser.id === id) {
+        const updateUser = { ...currentUser, username, email, avatar };
+        localStorage.setItem("token", JSON.stringify(updateUser));
+      }
+
       const updatedUsers = users.map((user: { id: string }) =>
-        user.id === id ? { ...user, username, email } : user,
+        user.id === id ? { ...user, avatar, username, email } : user,
       );
 
       localStorage.setItem("users", JSON.stringify(updatedUsers));

@@ -30,6 +30,7 @@ export const formSchema = z.object({
   username: z.string().min(2).max(50),
   email: z.email(),
   password: z.string().min(2).max(50),
+  avatar: z.string(),
 });
 
 export default function CreateUserButton() {
@@ -41,6 +42,7 @@ export default function CreateUserButton() {
       username: "",
       email: "",
       password: "",
+      avatar: "",
     },
   });
 
@@ -61,7 +63,7 @@ export default function CreateUserButton() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <UserPlus/> Create User
+          <UserPlus /> Create User
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -77,6 +79,19 @@ export default function CreateUserButton() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4"
           >
+            <FormField
+              control={form.control}
+              name="avatar"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Avatar</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="username"

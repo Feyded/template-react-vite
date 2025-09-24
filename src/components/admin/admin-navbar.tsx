@@ -25,7 +25,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
-  const { logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
 
   const handleLogout = async () => {
     logout();
@@ -40,7 +40,7 @@ export default function AdminNavbar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src={user?.avatar} />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
