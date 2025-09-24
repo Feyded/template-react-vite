@@ -33,10 +33,6 @@ export default function useUpdateUserMutation() {
         user.id === id ? { ...user, username, email } : user,
       );
 
-      if (localStorage.getItem("token")) {
-        localStorage.setItem("token", JSON.stringify(formData));
-      }
-
       localStorage.setItem("users", JSON.stringify(updatedUsers));
 
       return { id, username, email };
