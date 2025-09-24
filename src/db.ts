@@ -6,6 +6,8 @@ export const db = {
       role: "admin",
       email: "john@example.com",
       password: "password",
+      avatar:
+        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?crop=faces&fit=crop&w=100&h=100",
     },
     {
       id: "9b2c8e15-3a93-44d2-8f56-1c7e1e5c7a9a",
@@ -13,6 +15,8 @@ export const db = {
       role: "user",
       email: "jane@example.com",
       password: "password",
+      avatar:
+        "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=faces&fit=crop&w=100&h=100",
     },
     {
       id: "7d444840-9dc0-11d1-b245-5ffdce74fad2",
@@ -20,6 +24,8 @@ export const db = {
       role: "user",
       email: "mark@example.com",
       password: "password",
+      avatar:
+        "https://images.unsplash.com/photo-1502764613149-7f1d229e230f?crop=faces&fit=crop&w=100&h=100",
     },
     {
       id: "ddeb27fb-d9a0-4624-be4d-4615062daed4",
@@ -27,8 +33,11 @@ export const db = {
       role: "admin",
       email: "alice@example.com",
       password: "password",
+      avatar:
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=faces&fit=crop&w=100&h=100",
     },
   ],
+
   products: [
     {
       id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
