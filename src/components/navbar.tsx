@@ -20,7 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -51,6 +51,7 @@ import useCartQuery from "@/hooks/query/cart/use-cart-query";
 import { useAuthContext } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
+  avatar: z.string(),
   username: z.string(),
   email: z.email(),
 });
@@ -60,7 +61,6 @@ export default function Navbar() {
   const { mutate, isPending } = useUpdateUserMutation();
   const { user, isAuthenticated, logout } = useAuthContext();
   const { data } = useCartQuery();
-
   const cartCount = useMemo(() => {
     return (data ?? []).reduce(
       (acc: number, item: { quantity: number }) => acc + item.quantity,
@@ -71,16 +71,28 @@ export default function Navbar() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      avatar: user?.avatar,
       username: user?.username,
       email: user?.email,
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      form.reset(user);
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     logout();
   };
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    if (!user?.id) {
+      toast.error("Authentication required");
+      return;
+    }
+
     mutate(
       { id: user?.id, ...values },
       {
@@ -121,7 +133,7 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={user?.avatar} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
@@ -148,6 +160,18 @@ export default function Navbar() {
                       className="space-y-4"
                       onSubmit={form.handleSubmit(handleSubmit)}
                     >
+                      <FormField
+                        name="avatar"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Avatar</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       <FormField
                         name="username"
                         render={({ field }) => (
