@@ -45,7 +45,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </p>
         <div className="flex items-center justify-between">
           <span className="text-primary text-2xl font-bold">
-          ₱{product.price}
+            ₱{product.price}
           </span>
         </div>
       </CardContent>

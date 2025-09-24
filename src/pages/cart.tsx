@@ -9,7 +9,14 @@ import useRemoveItemQuantityMutation from "@/hooks/query/cart/use-remove-item-qu
 import type { Cart } from "@/types/cart";
 import type { Product } from "@/types/product";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader, Minus, Plus, ShoppingBag, Tag, Trash2 } from "lucide-react";
+import {
+  Frown,
+  Loader,
+  Minus,
+  Plus,
+  Tag,
+  Trash2,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -40,10 +47,12 @@ export default function CartPage() {
   const handleAddQuantity = (id: string) => {
     addQuantity(id, {
       onSuccess: () => {
-        queryClient.setQueryData<Cart>(["cart"], (cart) =>
-          cart?.map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
-          ),
+        queryClient.setQueryData<Cart>(
+          ["cart"],
+          (cart) =>
+            cart?.map((item) =>
+              item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+            ) || [],
         );
       },
       onError: (error) => {
@@ -55,10 +64,12 @@ export default function CartPage() {
   const handleRemoveQuantity = (id: string) => {
     removeQuantity(id, {
       onSuccess: () => {
-        queryClient.setQueryData<Cart>(["cart"], (cart) =>
-          cart?.map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
-          ),
+        queryClient.setQueryData<Cart>(
+          ["cart"],
+          (cart) =>
+            cart?.map((item) =>
+              item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+            ) || [],
         );
       },
       onError: (error) => {
@@ -72,8 +83,9 @@ export default function CartPage() {
     removeItem(id, {
       onSuccess: () => {
         toast.success("Item removed from cart.");
-        queryClient.setQueryData<Cart>(["cart"], (cart) =>
-          cart?.filter((item) => item.id !== id),
+        queryClient.setQueryData<Cart>(
+          ["cart"],
+          (cart) => cart?.filter((item) => item.id !== id) || [],
         );
       },
     });
@@ -203,8 +215,8 @@ export default function CartPage() {
       ) : (
         <div className="mt-48 flex items-center justify-center">
           <div className="flex flex-col items-center text-center">
-            <ShoppingBag className="text-foreground mb-4 h-16 w-16" />
-            <p className="text-muted-foreground">Your Cart is empty!</p>
+            <Frown className="size-16" />
+            <p className="text-muted-foreground mt-5">Your Cart is empty!</p>
             <Button onClick={() => navigate("/")} className="mt-3">
               <Tag />
               Start Shopping
