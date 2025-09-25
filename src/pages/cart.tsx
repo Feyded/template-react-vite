@@ -9,7 +9,7 @@ import useRemoveItemQuantityMutation from "@/hooks/query/cart/use-remove-item-qu
 import type { Cart, CartItem } from "@/types/cart";
 import type { Product } from "@/types/product";
 import { useQueryClient } from "@tanstack/react-query";
-import { Frown, Loader, Minus, Plus, Tag, Trash2 } from "lucide-react";
+import { Loader, Minus, Plus, ShoppingCart, Tag, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -205,7 +205,7 @@ export default function CartPage() {
       ) : (
         <div className="mt-48 flex items-center justify-center">
           <div className="flex flex-col items-center text-center">
-            <Frown className="size-16" />
+            <ShoppingCart className="size-16" />
             <p className="text-muted-foreground mt-5">Your Cart is empty!</p>
             <Button onClick={() => navigate("/")} className="mt-3">
               <Tag />

@@ -1,12 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Package } from "lucide-react";
+import { CheckCircle, Package, Tag } from "lucide-react";
 import formatPrice from "@/utils/format-price";
 import UseCheckoutQuery from "@/hooks/query/checkout/use-checkout-query";
 import type { Order } from "@/types/order";
 import type { Cart, CartItem } from "@/types/cart";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const PaidOrdersDisplay = () => {
+  const navigate = useNavigate();
   const { data, isFetching } = UseCheckoutQuery();
 
   const calculateTotalOrders = (cart: Cart) => {
@@ -20,6 +23,21 @@ const PaidOrdersDisplay = () => {
 
   if (isFetching) {
     return <div>Loading...</div>;
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="flex min-h-[calc(100vh-6rem)] items-center justify-center">
+        <div className="flex flex-col items-center text-center">
+          <Package className="size-16" />
+          <p className="text-muted-foreground mt-5">Your Order is empty!</p>
+          <Button onClick={() => navigate("/")} className="mt-3">
+            <Tag />
+            Start Shopping
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
