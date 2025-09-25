@@ -86,7 +86,7 @@ export default function CartPage() {
 
   if (isFetching || isError) {
     return (
-      <div className="container mx-auto max-w-4xl space-y-4 px-4 py-8">
+      <div className="mx-auto max-w-4xl space-y-4 px-4 py-8">
         {Array.from({ length: 5 }).map((_, i) => (
           <CardSkeleton key={i} />
         ))}

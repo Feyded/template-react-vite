@@ -7,6 +7,7 @@ import type { Order } from "@/types/order";
 import type { Cart, CartItem } from "@/types/cart";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import CardSkeleton from "@/components/card-skeleton";
 
 const PaidOrdersDisplay = () => {
   const navigate = useNavigate();
@@ -22,7 +23,13 @@ const PaidOrdersDisplay = () => {
   };
 
   if (isFetching) {
-    return <div>Loading...</div>;
+    return (
+      <div className="max-w container mx-auto max-w-4xl space-y-5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <CardSkeleton key={i} />
+        ))}
+      </div>
+    );
   }
 
   if (data.length === 0) {
