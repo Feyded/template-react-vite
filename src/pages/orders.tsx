@@ -118,7 +118,7 @@ const PaidOrdersDisplay = () => {
                   </span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm">Total Revenue</p>
+                  <p className="text-sm">Total:</p>
                   <p className="text-2xl font-bold text-green-600">
                     {formatPrice(order.total)}
                   </p>
