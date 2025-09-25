@@ -7,6 +7,7 @@ export type AuthContextType = {
   isAdmin: boolean;
   loading: boolean;
   logout: () => void;
+  setUser: (user: User) => void;
   login: (user: User) => void;
 };
 
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   loading: true,
   logout: () => {},
+  setUser: () => {},
   login: () => {},
 });
 
@@ -59,6 +61,7 @@ export default function AuthProvider({
   const value: AuthContextType = {
     isAuthenticated,
     user,
+    setUser,
     isAdmin,
     loading,
     logout,

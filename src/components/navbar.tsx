@@ -134,7 +134,7 @@ export default function Navbar() {
             <DropdownMenuTrigger asChild>
               <Avatar>
                 <AvatarImage src={user?.avatar} />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>{user?.username[0] ?? 'N'}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

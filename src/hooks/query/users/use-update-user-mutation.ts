@@ -1,8 +1,10 @@
+import { useAuthContext } from "@/contexts/AuthContext";
 import { wait } from "@/utils/wait";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function useUpdateUserMutation() {
   const queryClient = useQueryClient();
+  const { setUser } = useAuthContext();
 
   return useMutation({
     mutationFn: async (formData: {
@@ -34,6 +36,7 @@ export default function useUpdateUserMutation() {
 
       if (currentUser.id === id) {
         const updateUser = { ...currentUser, username, email, avatar };
+        setUser(updateUser);
         localStorage.setItem("token", JSON.stringify(updateUser));
       }
 
