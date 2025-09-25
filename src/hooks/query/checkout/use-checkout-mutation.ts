@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/contexts/AuthContext";
 import type { Cart } from "@/types/cart";
 import type { Order } from "@/types/order";
 import { wait } from "@/utils/wait";
@@ -11,8 +12,11 @@ type UseCheckoutMutationArgs = {
 
 export default function UseCheckoutMutation() {
   const queryClient = useQueryClient();
+  const { wallet } = useAuthContext();
   return useMutation({
     mutationFn: async ({ cart, tax, total }: UseCheckoutMutationArgs) => {
+      if (wallet < total) throw new Error("Insufficient Balance.");
+
       await wait(500);
 
       const newOrder: Order = {

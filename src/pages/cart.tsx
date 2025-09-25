@@ -80,6 +80,9 @@ export default function CartPage() {
         onSuccess: () => {
           toast.success("Checkout successfull!");
         },
+        onError: (error) => {
+          toast.error(error.message);
+        },
       },
     );
   };

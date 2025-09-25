@@ -37,12 +37,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  CreditCard,
-  LayoutDashboard,
-  ShoppingBag,
-  ShoppingCart,
-} from "lucide-react";
+import { LayoutDashboard, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -59,6 +54,8 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import useCartQuery from "@/hooks/query/cart/use-cart-query";
 import { useAuthContext } from "@/contexts/AuthContext";
+import AddWalletButton from "./add-wallet-button";
+import formatPrice from "@/utils/format-price";
 
 const formSchema = z.object({
   avatar: z.string(),
@@ -69,7 +66,7 @@ const formSchema = z.object({
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useUpdateUserMutation();
-  const { user, isAuthenticated, logout } = useAuthContext();
+  const { user, wallet, isAuthenticated, logout } = useAuthContext();
   const { data } = useCartQuery();
   const cartCount = useMemo(() => {
     return (data ?? []).reduce(
@@ -159,18 +156,7 @@ export default function Navbar() {
               <p>Checkout</p>
             </TooltipContent>
           </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button size="icon" variant="ghost" asChild>
-                <Link to="/orders">
-                  <CreditCard />
-                </Link>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Balance</p>
-            </TooltipContent>
-          </Tooltip>
+          <AddWalletButton />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar>
@@ -180,6 +166,9 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <div className="text-muted-foreground py-2 ps-2 text-sm font-medium">
+                {formatPrice(wallet)}
+              </div>
               <DropdownMenuSeparator />
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
