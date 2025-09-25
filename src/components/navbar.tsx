@@ -81,7 +81,7 @@ export default function Navbar() {
     if (user) {
       form.reset(user);
     }
-  }, [user]);
+  }, [user, form]);
 
   const handleLogout = async () => {
     logout();
