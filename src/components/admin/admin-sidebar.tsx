@@ -1,4 +1,4 @@
-import { Home, Tag, User } from "lucide-react";
+import { Home, LayoutDashboard, Tag, User } from "lucide-react";
 
 import {
   Sidebar,
@@ -6,9 +6,11 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
 
@@ -33,6 +35,19 @@ const items = [
 export default function AdminSidebar() {
   return (
     <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link to={"/admin"}>
+                <LayoutDashboard />
+                <span className="font-medium">Greek</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
