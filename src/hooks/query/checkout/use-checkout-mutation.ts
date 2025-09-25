@@ -3,14 +3,22 @@ import type { Order } from "@/types/order";
 import { wait } from "@/utils/wait";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+type UseCheckoutMutationArgs = {
+  cart: Cart;
+  tax: number;
+  total: number;
+};
+
 export default function UseCheckoutMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (cart: Cart) => {
+    mutationFn: async ({ cart, tax, total }: UseCheckoutMutationArgs) => {
       await wait(500);
 
       const newOrder: Order = {
         id: crypto.randomUUID(),
+        tax,
+        total,
         cart,
       };
 

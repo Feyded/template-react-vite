@@ -17,7 +17,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function CartPage() {
   const [currentItem, setCurrentItem] = useState("");
-  const { data, isFetching, isError } = useCartQuery();
+  const { data: cart, isFetching, isError } = useCartQuery();
   const { mutate: removeItem, isPending: removingItem } =
     useRemoveFromCartMutation();
   const { mutate: checkout, isPending: checkingOut } = useCheckoutMutation();
@@ -29,12 +29,12 @@ export default function CartPage() {
   const MotionCard = motion.create(Card);
 
   const subTotal = useMemo(() => {
-    return (data ?? []).reduce(
+    return (cart ?? []).reduce(
       (sum: number, item: { quantity: number; product: Product }) =>
         sum + item.product.price * item.quantity,
       0,
     );
-  }, [data]);
+  }, [cart]);
 
   const tax = subTotal * 0.08;
   const total = subTotal + tax;
@@ -74,11 +74,14 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    checkout(data, {
-      onSuccess: () => {
-        toast.success("Checkout successfull!");
+    checkout(
+      { cart, tax, total },
+      {
+        onSuccess: () => {
+          toast.success("Checkout successfull!");
+        },
       },
-    });
+    );
   };
 
   if (isFetching || isError) {
@@ -95,11 +98,11 @@ export default function CartPage() {
     <div className="container mx-auto max-w-4xl px-4 py-8">
       <h1 className="mb-8 text-3xl font-bold">Shopping Cart</h1>
 
-      {data.length > 0 ? (
+      {cart.length > 0 ? (
         <>
           <div className="space-y-4">
             <AnimatePresence>
-              {data.map((cartItem: CartItem) => (
+              {cart.map((cartItem: CartItem) => (
                 <MotionCard
                   key={cartItem.id}
                   className="p-4"

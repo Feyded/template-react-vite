@@ -9,15 +9,6 @@ import type { Cart, CartItem } from "@/types/cart";
 const PaidOrdersDisplay = () => {
   const { data, isFetching } = UseCheckoutQuery();
 
-  const calculateTotalValue = (cart: Cart) => {
-    const totalValue = cart.reduce(
-      (sum, cart) => sum + cart.product.price * cart.quantity,
-      0,
-    );
-
-    return formatPrice(totalValue);
-  };
-
   const calculateTotalOrders = (cart: Cart) => {
     const totalOrderQuantity = cart.reduce(
       (sum, cart) => (sum += cart.quantity),
@@ -41,7 +32,7 @@ const PaidOrdersDisplay = () => {
               <h1 className="text-3xl font-bold">Paid Orders</h1>
               <p className="text-muted-foreground mt-1">
                 {calculateTotalOrders(order.cart)} orders • Total value:{" "}
-                {calculateTotalValue(order.cart)}
+                {formatPrice(order.total)}
               </p>
             </div>
             <Badge
@@ -129,9 +120,21 @@ const PaidOrdersDisplay = () => {
                 <div className="text-right">
                   <p className="text-sm">Total Revenue</p>
                   <p className="text-2xl font-bold text-green-600">
-                    {calculateTotalValue(order.cart)}
+                    {formatPrice(order.total)}
                   </p>
                 </div>
+              </div>
+
+              {/* Tax Section */}
+              <div className="mt-4 flex justify-between text-sm text-gray-500">
+                <span>Tax (8%)</span>
+                <span>{formatPrice(order.tax)}</span>
+              </div>
+
+              {/* Total Including Tax */}
+              <div className="mt-1 flex justify-between font-semibold text-green-700">
+                <span>Total Without Tax</span>
+                <span>{formatPrice(order.total / 1.08)}</span>
               </div>
             </CardContent>
           </Card>
