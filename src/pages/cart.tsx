@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import useAddItemQuantityMutation from "@/hooks/query/cart/use-add-item-quantity-mutation";
 import useCartQuery from "@/hooks/query/cart/use-cart-query";
-import useCheckoutMutation from "@/hooks/query/cart/use-checkout-mutation";
+import useCheckoutMutation from "@/hooks/query/checkout/use-checkout-mutation";
 import useRemoveFromCartMutation from "@/hooks/query/cart/use-remove-from-cart.mutation";
 import useRemoveItemQuantityMutation from "@/hooks/query/cart/use-remove-item-quantity-mutation";
 import type { Cart, CartItem } from "@/types/cart";
@@ -26,7 +26,7 @@ export default function CartPage() {
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const MotionCard = motion(Card);
+  const MotionCard = motion.create(Card);
 
   const subTotal = useMemo(() => {
     return (data ?? []).reduce(

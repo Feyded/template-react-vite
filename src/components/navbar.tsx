@@ -20,6 +20,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
@@ -32,7 +37,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { CreditCard, LayoutDashboard, ShoppingBag, ShoppingCart } from "lucide-react";
+import {
+  CreditCard,
+  LayoutDashboard,
+  ShoppingBag,
+  ShoppingCart,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -115,31 +125,52 @@ export default function Navbar() {
       {isAuthenticated ? (
         <div className="flex items-center gap-3">
           <ModeToggle />
-          <div className="relative">
-            <Button size="icon" variant="ghost" asChild>
-              <Link to="/cart">
-                <ShoppingCart />
-              </Link>
-            </Button>
-            {cartCount > 0 && (
-              <Badge
-                variant="destructive"
-                className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs"
-              >
-                {cartCount}
-              </Badge>
-            )}
-          </div>
-          <Button size="icon" variant="ghost" asChild>
-            <Link to="/orders">
-              <ShoppingBag   />
-            </Link>
-          </Button>
-          <Button size="icon" variant="ghost" asChild>
-            <Link to="/orders">
-              <CreditCard   />
-            </Link>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative">
+                <Button size="icon" variant="ghost" asChild>
+                  <Link to="/cart">
+                    <ShoppingCart />
+                  </Link>
+                </Button>
+                {cartCount > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs"
+                  >
+                    {cartCount}
+                  </Badge>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Cart</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="ghost" asChild>
+                <Link to="/orders">
+                  <ShoppingBag />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Checkout</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="ghost" asChild>
+                <Link to="/orders">
+                  <CreditCard />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Balance</p>
+            </TooltipContent>
+          </Tooltip>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar>

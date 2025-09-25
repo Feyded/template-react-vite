@@ -5,6 +5,7 @@ export const db = {
       username: "john_doe",
       role: "admin",
       email: "john@example.com",
+      wallet: 500.0,
       password: "password",
       avatar:
         "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?crop=faces&fit=crop&w=100&h=100",
@@ -14,6 +15,7 @@ export const db = {
       username: "jane_smith",
       role: "user",
       email: "jane@example.com",
+      wallet: 500.0,
       password: "password",
       avatar:
         "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=faces&fit=crop&w=100&h=100",
@@ -23,6 +25,7 @@ export const db = {
       username: "mark_dev",
       role: "user",
       email: "mark@example.com",
+      wallet: 500.0,
       password: "password",
       avatar:
         "https://images.unsplash.com/photo-1502764613149-7f1d229e230f?crop=faces&fit=crop&w=100&h=100",
@@ -32,6 +35,7 @@ export const db = {
       username: "alice_wonder",
       role: "admin",
       email: "alice@example.com",
+      wallet: 500.0,
       password: "password",
       avatar:
         "https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=faces&fit=crop&w=100&h=100",
