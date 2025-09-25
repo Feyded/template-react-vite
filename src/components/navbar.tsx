@@ -32,7 +32,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { LayoutDashboard, ShoppingCart } from "lucide-react";
+import { CreditCard, LayoutDashboard, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -130,11 +130,21 @@ export default function Navbar() {
               </Badge>
             )}
           </div>
+          <Button size="icon" variant="ghost" asChild>
+            <Link to="/orders">
+              <ShoppingBag   />
+            </Link>
+          </Button>
+          <Button size="icon" variant="ghost" asChild>
+            <Link to="/orders">
+              <CreditCard   />
+            </Link>
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar>
                 <AvatarImage src={user?.avatar} />
-                <AvatarFallback>{user?.username[0] ?? 'N'}</AvatarFallback>
+                <AvatarFallback>{user?.username[0] ?? "N"}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

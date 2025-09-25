@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { Product } from "@/types/product";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ProductActionCell from "./product-action-cell";
+import formatPrice from "@/utils/format-price";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -33,12 +34,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "Price",
     cell: ({ row }) => {
       const product = row.original;
-      const formatted = new Intl.NumberFormat("en-PH", {
-        style: "currency",
-        currency: "PHP",
-      }).format(product.price);
-
-      return <div>{formatted}</div>;
+      return <div>{formatPrice(product.price)}</div>;
     },
   },
   {

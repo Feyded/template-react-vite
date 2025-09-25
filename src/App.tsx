@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/protected-route";
 import GuestRoute from "./components/guest-route";
 import RootLayout from "./components/root-layout";
 import CartPage from "./pages/cart";
+import OrdersPage from "./pages/orders";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           {/* CUSTOMER LINKS */}
           <Route element={<ProtectedRoute role={["user", "admin"]} />}>
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/orders" element={<OrdersPage />} />
           </Route>
         </Route>
 

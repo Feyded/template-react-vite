@@ -74,7 +74,7 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    checkout(undefined, {
+    checkout(data, {
       onSuccess: () => {
         toast.success("Checkout successfull!");
       },
