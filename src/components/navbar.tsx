@@ -53,9 +53,11 @@ import useUpdateUserMutation from "@/hooks/query/users/use-update-user-mutation"
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import useCartQuery from "@/hooks/query/cart/use-cart-query";
-import { useAuthContext } from "@/contexts/AuthContext";
 import AddWalletButton from "./add-wallet-button";
 import formatPrice from "@/utils/format-price";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { logout } from "@/store/auth-slice";
 
 const formSchema = z.object({
   avatar: z.string(),
@@ -66,7 +68,12 @@ const formSchema = z.object({
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useUpdateUserMutation();
-  const { user, wallet, isAuthenticated, logout } = useAuthContext();
+  const { user, wallet, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
+  const dispatch = useDispatch();
+
   const { data } = useCartQuery();
   const cartCount = useMemo(() => {
     return (data ?? []).reduce(
@@ -91,7 +98,7 @@ export default function Navbar() {
   }, [user, form]);
 
   const handleLogout = async () => {
-    logout();
+    dispatch(logout());
   };
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {

@@ -21,14 +21,18 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useAuthContext } from "@/contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { logout } from "@/store/auth-slice";
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
-  const { user, logout } = useAuthContext();
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    logout();
+    dispatch(logout());
     navigate("/login");
   };
 

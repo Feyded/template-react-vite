@@ -16,8 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuthContext } from "@/contexts/AuthContext";
 import useAuthMutation from "@/hooks/query/use-auth-mutation";
+import { login } from "@/store/auth-slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertCircleIcon,
@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import z from "zod";
@@ -46,7 +47,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuthContext();
+  const dispatch = useDispatch();
   const { mutate, isPending } = useAuthMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,7 +60,8 @@ export default function LoginPage() {
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     mutate(values, {
       onSuccess: (user) => {
-        login(user);
+        console.log(user);
+        dispatch(login(user));
         toast.success("Login Successfull!");
         setError("");
         if (user.role === "admin") {

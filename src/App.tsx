@@ -10,8 +10,17 @@ import GuestRoute from "./components/guest-route";
 import RootLayout from "./components/root-layout";
 import CartPage from "./pages/cart";
 import OrdersPage from "./pages/orders";
+import { useEffect } from "react";
+import { initializeAuth } from "./store/auth-slice";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <Routes>

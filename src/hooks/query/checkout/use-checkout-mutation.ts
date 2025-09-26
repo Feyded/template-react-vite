@@ -1,8 +1,10 @@
-import { useAuthContext } from "@/contexts/AuthContext";
+import { setWallet } from "@/store/auth-slice";
+import type { RootState } from "@/store/store";
 import type { Cart } from "@/types/cart";
 import type { Order } from "@/types/order";
 import { wait } from "@/utils/wait";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch, useSelector } from "react-redux";
 
 type UseCheckoutMutationArgs = {
   cart: Cart;
@@ -12,7 +14,9 @@ type UseCheckoutMutationArgs = {
 
 export default function UseCheckoutMutation() {
   const queryClient = useQueryClient();
-  const { wallet, setWallet } = useAuthContext();
+  const wallet = useSelector((state: RootState) => state.auth.wallet);
+
+  const dispatch = useDispatch();
 
   return useMutation({
     mutationFn: async ({ cart, tax, total }: UseCheckoutMutationArgs) => {
@@ -33,7 +37,7 @@ export default function UseCheckoutMutation() {
         : localStorage.removeItem("token");
 
       const updatedWallet = { ...user, wallet: wallet - total };
-      setWallet(updatedWallet.wallet);
+      dispatch(setWallet(updatedWallet.wallet));
 
       const ordersStr = localStorage.getItem("orders");
       const orders = ordersStr ? JSON.parse(ordersStr) : [];

@@ -1,8 +1,9 @@
-import { useAuthContext } from "@/contexts/AuthContext";
+import type { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ role }: { role: string[] }) {
-  const { isAuthenticated, user, loading } = useAuthContext();
+  const { isAuthenticated, user, loading } = useSelector((state: RootState) => state.auth);
 
   if (loading) {
     return <div>Loading...</div>;

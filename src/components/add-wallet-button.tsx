@@ -31,8 +31,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useAddWalletMutation from "@/hooks/query/wallet/use-add-wallet-mutation";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { useAuthContext } from "@/contexts/AuthContext";
 import formatPrice from "@/utils/format-price";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
+import { setWallet } from "@/store/auth-slice";
 
 export const formSchema = z.object({
   wallet: z.number().min(1).max(10000),
@@ -41,7 +43,9 @@ export const formSchema = z.object({
 export default function AddWalletButton() {
   const [open, setOpen] = useState(false);
   const { mutate, isPending } = useAddWalletMutation();
-  const { wallet, setWallet } = useAuthContext();
+  const wallet = useSelector((state: RootState) => state.auth.wallet);
+
+  const dispatch = useDispatch();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -53,7 +57,7 @@ export default function AddWalletButton() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     mutate(values, {
       onSuccess: (user) => {
-        setWallet(user.wallet);
+        dispatch(setWallet(user.wallet));
         toast.success("Amount successfully added!");
         form.reset();
         setOpen(false);

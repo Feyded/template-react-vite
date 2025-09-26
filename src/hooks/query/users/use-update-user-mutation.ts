@@ -1,10 +1,11 @@
-import { useAuthContext } from "@/contexts/AuthContext";
+import { setUser } from "@/store/auth-slice";
 import { wait } from "@/utils/wait";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
 
 export default function useUpdateUserMutation() {
   const queryClient = useQueryClient();
-  const { setUser } = useAuthContext();
+  const dispatch = useDispatch();
 
   return useMutation({
     mutationFn: async (formData: {
@@ -36,7 +37,7 @@ export default function useUpdateUserMutation() {
 
       if (currentUser.id === id) {
         const updateUser = { ...currentUser, username, email, avatar };
-        setUser(updateUser);
+        dispatch(setUser(updateUser));
         localStorage.setItem("token", JSON.stringify(updateUser));
       }
 

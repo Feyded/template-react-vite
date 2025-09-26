@@ -11,7 +11,6 @@ export const columns: ColumnDef<User>[] = [
     id: "avatar",
     cell: ({ row }) => {
       const user = row.original;
-      console.log(user.avatar);
       return (
         <div className="ml-5">
           <Avatar>
