@@ -12,7 +12,8 @@ type UseCheckoutMutationArgs = {
 
 export default function UseCheckoutMutation() {
   const queryClient = useQueryClient();
-  const { wallet } = useAuthContext();
+  const { wallet, setWallet } = useAuthContext();
+
   return useMutation({
     mutationFn: async ({ cart, tax, total }: UseCheckoutMutationArgs) => {
       if (wallet < total) throw new Error("Insufficient Balance.");
@@ -26,12 +27,21 @@ export default function UseCheckoutMutation() {
         cart,
       };
 
+      const userStr = localStorage.getItem("token");
+      const user = userStr
+        ? JSON.parse(userStr)
+        : localStorage.removeItem("token");
+
+      const updatedWallet = { ...user, wallet: wallet - total };
+      setWallet(updatedWallet.wallet);
+
       const ordersStr = localStorage.getItem("orders");
       const orders = ordersStr ? JSON.parse(ordersStr) : [];
 
       const updatedOrders = [...orders, newOrder];
 
       localStorage.setItem("orders", JSON.stringify(updatedOrders));
+      localStorage.setItem("token", JSON.stringify(updatedWallet));
       localStorage.removeItem("cart");
 
       return newOrder;
