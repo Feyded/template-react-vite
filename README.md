@@ -24,6 +24,6 @@ This project is built using **React**, **Vite**, **TypeScript**, **TailwindCSS**
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Feyded/template-react-vite.git
-cd template-react-vite
+git clone https://github.com/Feyded/react-vite-template.git
+cd react-vite-template
 npm install
