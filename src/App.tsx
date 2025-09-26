@@ -13,6 +13,7 @@ import OrdersPage from "./pages/orders";
 import { useEffect } from "react";
 import { initializeAuth } from "./store/auth-slice";
 import { useDispatch } from "react-redux";
+import NotFoundPage from "./pages/not-found";
 
 function App() {
   const dispatch = useDispatch();
@@ -46,6 +47,8 @@ function App() {
             <Route path="products" element={<ProductsPage />} />
           </Route>
         </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
