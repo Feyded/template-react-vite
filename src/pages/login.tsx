@@ -60,7 +60,6 @@ export default function LoginPage() {
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     mutate(values, {
       onSuccess: (user) => {
-        console.log(user);
         dispatch(login(user));
         toast.success("Login Successfull!");
         setError("");
